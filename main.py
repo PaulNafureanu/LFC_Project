@@ -11,6 +11,7 @@ def run_exercise_1_solution():
     G1 = Gramatica()
     G1.citire(file_path)
     G1.afisare()
+    
 
     # G1.verificare()
 

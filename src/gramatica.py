@@ -14,6 +14,8 @@ class Productie:
 
 
 class Gramatica:
+    SIMBOL_VID = "λ"
+    
     def __init__(self) -> None:
         # multimea neterminalelor
         self.VN: List[str] = list()
