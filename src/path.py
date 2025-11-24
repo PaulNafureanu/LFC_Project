@@ -70,4 +70,11 @@ class PathMaker:
         - pe Windows: C:\\Users\\Paul\\Uni\\LF\\data\\gramatica\\1.txt
         - pe macOS:   /Users/Paul/Uni/LF/data/gramatica/1.txt
         """
-        return self.root_dir.joinpath(*self.base_parts, *parts)
+        file_path = self.root_dir.joinpath(*self.base_parts, *parts)
+
+        if file_path.exists():
+            return file_path
+        else:
+            raise FileNotFoundError(
+                f"Fisierul nu exista or cale incorecta : '{file_path}'"
+            )
