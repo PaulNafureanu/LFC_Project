@@ -1,4 +1,5 @@
 from typing import Set
+from pathlib import Path
 
 
 class Productie:
@@ -20,7 +21,7 @@ class Gramatica:
         # multimea de productii (reguli)
         self.productiile: Set[Productie] = set()
 
-    def citire(self, file_path: str):
+    def citire(self, file_path: Path):
         pass
 
     def verificare(self):
