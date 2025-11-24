@@ -1,5 +1,11 @@
+from src.gramatica import Gramatica
+
+
 def main() -> None:
-    pass
+
+    G1 = Gramatica()
+
+    G1.afisare()
 
 
 if __name__ == "__main__":
