@@ -1,2 +1,5 @@
 # Mediu virtual (virtual environment)
 .venv
+
+# Cache for python
+__pycache__
