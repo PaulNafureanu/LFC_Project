@@ -13,7 +13,8 @@ def run_exercise_1_solution():
     G1.afisare()
     
 
-    # G1.verificare()
+    if G1.verificare():
+        print("Gramatica este valida")
 
     # G1.generare()
 
