@@ -11,12 +11,11 @@ def run_exercise_1_solution():
     G1 = Gramatica()
     G1.citire(file_path)
     G1.afisare()
-    
 
     if G1.verificare():
         print("Gramatica este valida")
 
-    # G1.generare()
+    G1.generare()
 
 
 def main() -> None:
