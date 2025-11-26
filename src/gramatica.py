@@ -15,7 +15,7 @@ class Productie:
 
 
 class Gramatica:
-    SIMBOL_VID = "*" # pentru cuvantul vid λ
+    SIMBOL_VID = "*"  # pentru cuvantul vid λ
 
     def __init__(self) -> None:
         # multimea neterminalelor
@@ -112,6 +112,9 @@ class Gramatica:
         # Presupunem ca nu exista o productie cu membrul stang S si incercam sa gasim
         is_there_a_left_with_S: bool = False
 
+        # Definim VN ∪ VT
+        vn_vt_union = self.VN.union(self.VT)
+        
         # Iteram prin toate productiile
         for index, productie in enumerate(self.productiile, start=1):
 
@@ -131,7 +134,6 @@ class Gramatica:
                     is_every_symbol_in_VN_VT = False
 
             # Pentru fiecare simbol din membrul drept
-            vn_vt_union = self.VN.union(self.VT)
             for symbol in right:
                 # Verificam daca este in multimi
                 if symbol not in vn_vt_union:
@@ -169,13 +171,13 @@ class Gramatica:
         Afiseaza frumos gramatica la terminal.
         """
 
-        # Transforma un set de string-uri intr-o lista sortata, separate prin virgule
-        def list_to_format(seq: Set[str]):
+        # Transforma un set de string-uri intr-un mesaj gata de printare
+        def set_to_str(seq: Set[str]):
             return " " + ", ".join(sorted(seq)) + " "
 
-        print("\nSe afiseaza grafica definita prin: ")
-        print(f"VN := {{{list_to_format(self.VN)}}}")
-        print(f"VT := {{{list_to_format(self.VT)}}}")
+        print("\nSe afiseaza gramatica definita prin: ")
+        print(f"VN := {{{set_to_str(self.VN)}}}")
+        print(f"VT := {{{set_to_str(self.VT)}}}")
         print(f"S  := {self.S}")
 
         # Iterare si printare toate productiile
@@ -185,8 +187,8 @@ class Gramatica:
 
     def generare(self, should_print: bool = True) -> List[str]:
         """
-        Genereaza un cuvant incepand de la simbolul de start, cu afisarea fiecarui pas.
-        Returneaza lista cuvintelor obtinute la fiecare pas (inclusiv cuvantul initial).
+        Genereaza un cuvant final incepand de la simbolul de start, cu afisarea fiecarui pas.
+        Returneaza lista de pasi in ordine de la simbolul de start pana la cuvantul generat.
 
         Procesul de generare:
         - Se alege aleatoriu o regula de productie aplicabila.
@@ -195,22 +197,22 @@ class Gramatica:
         - Se repeta pana cuvantul transformat este format doar din terminale.
         """
 
-        resulted_words: List[str] = list()
+        intermediary_steps: List[str] = list()
 
-        # Daca gramatica nu este valida se returneaza o lista goala de cuvinte
-        if not self.S or not self.verificare(False):
-            return resulted_words
+        # Daca nu exista simbol de start returneaza o lista goala de pasi intermediari
+        if not self.S:
+            return intermediary_steps
 
-        # Se initializeaza primul cuvant cu simbolul de start
-        word = self.S
-        resulted_words.append(word)
+        # Se initializeaza primul pas cu simbolul de start
+        word_step = self.S
+        intermediary_steps.append(word_step)
 
-        # Se defineste o lista care contine neterminalele cuvantului
+        # Se initializeaza o lista care va contine neterminalele cuvantului cu simbolul de start
         vn_symbols_in_word: List[str] = list(self.S)
 
-        # Se printeaza primul cuvant daca se doreste
+        # Se printeaza primul pas (S) daca se doreste
         if should_print:
-            print(f"{word}", end="")
+            print(f"{word_step}", end="")
 
         # Cat timp exista neterminale in cuvant
         while vn_symbols_in_word:
@@ -223,12 +225,25 @@ class Gramatica:
                     if symbol == productie.left:
                         productii_aplicabile.add(productie)
 
+            # In cazul in care nu exista productii aplicabile
+            if not productii_aplicabile:
+                # Se verifica daca la acest pas, cuvantul este format doar din terminale
+                just_terminals: bool = set(word_step).issubset(self.VT)
+
+                # Daca este, atunci iesire din ciclu. In caz contrar, ridica o eroare.
+                if just_terminals:
+                    break
+                else:
+                    raise ValueError(
+                        f"[Eroare] Cuvantul '{word_step}' nu este format doar din terminale, dar nu exista productii aplicabile. A se verifica gramatica"
+                    )
+
             # Se alege aleatoriu o productie
             prod_random = random.choice(list(productii_aplicabile))
 
             # Definim setul de pozitii posibile unde productia aleasa se poate aplica
             possible_positions: Set[int] = set()
-            for index, symbol in enumerate(word):
+            for index, symbol in enumerate(word_step):
                 # prin comparare fiecarui simbol al cuvantului cu membrul stang al productiei alese
                 if symbol == prod_random.left:
                     possible_positions.add(index)
@@ -237,21 +252,29 @@ class Gramatica:
             pos_random = random.choice(list(possible_positions))
 
             # Se aplica productia prin inlocuirea simbolului cu membrul drept al productiei
-            chars = list(word)
+            chars = list(word_step)
             chars[pos_random] = prod_random.right
-            new_word = "".join(chars)
+            new_word_step = "".join(chars)
 
             # Se printeaza pas cu pas transformarile
             if should_print:
-                print(f" ⟶ {new_word}", end="")
+                print(f" ⟶ {new_word_step}", end="")
 
             # Se adauga noul cuvant format in lista finala
-            resulted_words.append(new_word)
+            intermediary_steps.append(new_word_step)
 
             # Si se reia procesul pana cand cuvantul este format doar din terminale, astfel spus len(vn_symbols_in_word) = 0
-            word = new_word
-            vn_symbols_in_word = list(self.VN.intersection(word))
+            word_step = new_word_step
+            vn_symbols_in_word = list(self.VN.intersection(word_step))
 
-        # printeaza new line si returneaza lista de cuvinte generate pas cu pas
+        # Verificam daca cuvantul final este format doar din terminale. Daca nu ridicam o eroare.
+        final_word = intermediary_steps[-1]
+        if not set(final_word).issubset(self.VT):
+            # Cum la iesirea din ciclu nu mai exista simboluri neterminale, atunci cuvantul final contine simboluri din afara VN ∪ VT
+            raise ValueError(
+                f"[Eroare] Cuvantul final '{final_word}' trebuie sa fie format din simboluri terminale. A se verifica gramatica."
+            )
+
+        # printeaza new line si returneaza lista de pasi generate de productii
         print()
-        return resulted_words
+        return intermediary_steps
