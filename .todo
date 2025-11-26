@@ -1,0 +1,4 @@
+Pentru mine:
+  - sa se implementeze generarea cu simbolul * reprezentand cuvantul vid (λ)
+  - daca nu mai sunt productii aplicabile, sa se verifice explicit daca cuvantul este format din terminale
+  - se citeste n de la tastatura si se genereaza n cuvinte distincte in gramatica

@@ -15,7 +15,7 @@ class Productie:
 
 
 class Gramatica:
-    SIMBOL_VID = "λ"
+    SIMBOL_VID = "*" # pentru cuvantul vid λ
 
     def __init__(self) -> None:
         # multimea neterminalelor
@@ -185,8 +185,8 @@ class Gramatica:
 
     def generare(self, should_print: bool = True) -> List[str]:
         """
-        Generare de cuvinte incepand de la simbolul de start, cu afisarea fiecarui pas.
-        Se returneaza o lista care contine cuvintele formate in ordinea generata pas cu pas.
+        Genereaza un cuvant incepand de la simbolul de start, cu afisarea fiecarui pas.
+        Returneaza lista cuvintelor obtinute la fiecare pas (inclusiv cuvantul initial).
 
         Procesul de generare:
         - Se alege aleatoriu o regula de productie aplicabila.
@@ -224,8 +224,7 @@ class Gramatica:
                         productii_aplicabile.add(productie)
 
             # Se alege aleatoriu o productie
-            prod_picker = random.randint(0, len(productii_aplicabile) - 1)
-            prod_random = list(productii_aplicabile)[prod_picker]
+            prod_random = random.choice(list(productii_aplicabile))
 
             # Definim setul de pozitii posibile unde productia aleasa se poate aplica
             possible_positions: Set[int] = set()
@@ -235,8 +234,7 @@ class Gramatica:
                     possible_positions.add(index)
 
             # Se alege aleatoriu o pozitie in cuvant
-            pos_picker = random.randint(0, len(possible_positions) - 1)
-            pos_random = list(possible_positions)[pos_picker]
+            pos_random = random.choice(list(possible_positions))
 
             # Se aplica productia prin inlocuirea simbolului cu membrul drept al productiei
             chars = list(word)
