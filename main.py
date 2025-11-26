@@ -33,9 +33,9 @@ def run_exercise_1_solution():
 
         # Pentru a evita cazul unei bucle infinite definim un maxim rezonabil de incercari
         attempt = 0
-        LOOP_MAX_ATTEMPTS = 100_000 
+        LOOP_MAX_ATTEMPTS = 100_000
 
-        # Se ruleaza functia de generare pana avem n cuvinte finale distincte 
+        # Se ruleaza functia de generare pana avem n cuvinte finale distincte
         while len(final_distinct_words) < n and attempt < LOOP_MAX_ATTEMPTS:
             attempt += 1
             try:
@@ -43,16 +43,18 @@ def run_exercise_1_solution():
             except Exception as e:
                 print(e)
                 continue
-            
+
             # Daca nu exista pasi intermediari (lista e goala), treci la urmatoare incercare
             if not steps:
                 continue
 
             # Se adauga cuvantul final in set
             final_distinct_words.add(steps[-1])
-        
+
         # Printeaza cuvintele finale
-        print(f"\nCuvintele generate de gramatica sunt {len(final_distinct_words)}: {final_distinct_words}")
+        print(
+            f"\nCuvintele generate de gramatica sunt {len(final_distinct_words)}: {final_distinct_words}"
+        )
 
 
 def main() -> None:

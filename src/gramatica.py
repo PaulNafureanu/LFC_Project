@@ -109,12 +109,12 @@ class Gramatica:
                 f"(2) S ∈ VN, adica simbolul de start trebuie sa fie un neterminal."
             )
 
-        # Presupunem ca nu exista o productie cu membrul stang S si incercam sa gasim
+        # Presupunem ca nu exista o productie cu membrul stang S si incercam sa gasim o asemenea productie
         is_there_a_left_with_S: bool = False
 
         # Definim VN ∪ VT
         vn_vt_union = self.VN.union(self.VT)
-        
+
         # Iteram prin toate productiile
         for index, productie in enumerate(self.productiile, start=1):
 
@@ -135,7 +135,10 @@ class Gramatica:
 
             # Pentru fiecare simbol din membrul drept
             for symbol in right:
-                # Verificam daca este in multimi
+                # Verificam daca este simbolul vid si
+                if symbol == self.SIMBOL_VID:
+                    continue
+                # Daca este in multimi
                 if symbol not in vn_vt_union:
                     is_every_symbol_in_VN_VT = False
 
@@ -208,7 +211,7 @@ class Gramatica:
         intermediary_steps.append(word_step)
 
         # Se initializeaza o lista care va contine neterminalele cuvantului cu simbolul de start
-        vn_symbols_in_word: List[str] = list(self.S)
+        vn_symbols_in_word: List[str] = list(self.VN.intersection(word_step))
 
         # Se printeaza primul pas (S) daca se doreste
         if should_print:
@@ -252,9 +255,14 @@ class Gramatica:
             pos_random = random.choice(list(possible_positions))
 
             # Se aplica productia prin inlocuirea simbolului cu membrul drept al productiei
-            chars = list(word_step)
-            chars[pos_random] = prod_random.right
-            new_word_step = "".join(chars)
+            new_word_step: str = ""
+            # Daca membrul drept este vid atunci se elimina simbolul de tot, altfel se inlocuieste
+            if prod_random.right == self.SIMBOL_VID:
+                new_word_step = word_step[:pos_random] + word_step[pos_random + 1 :]
+            else:
+                chars = list(word_step)
+                chars[pos_random] = prod_random.right
+                new_word_step = "".join(chars)
 
             # Se printeaza pas cu pas transformarile
             if should_print:
