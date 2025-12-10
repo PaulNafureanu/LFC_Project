@@ -107,7 +107,7 @@ class AFD:
         print("\nSe afiseaza AFD definita prin: ")
         print(f"Stari = {list_to_str(self.Stari)}")
         print(f"Sigma = {list_to_str(self.Sigma)}")
-        # print(f"Delta = {self.Delta}")
+        
         print()
         print(f"Stare initiala = {self.StareInitiala}")
         print(f"Stari finale = {list_to_str(self.StariFinale)}")
@@ -115,7 +115,31 @@ class AFD:
         print(f"{"\n".join({" " + str(r) for r in  self.Reguli})}")
 
     def verificare(self, cuvant: str):
-
-        pass
-
-    pass
+        
+        for c in cuvant:
+            if c not in self.Sigma:
+                print(f"simbol invalid '{c} in cuvant. ", f"Alfabetul este {{{", ".join(self.Sigma)}}}")
+                return "neacceptat"
+            
+        print(f"Stare initiala: {self.StareInitiala}")
+        stare_curenta = self.StareInitiala
+        
+        for simbol in cuvant:
+            exista_regula = False
+            for regula in self.Reguli:
+                if regula.membrul_stang == stare_curenta and regula.simbol == simbol:
+                    exista_regula = True
+                    print(f"{stare_curenta} --{simbol}--> {regula.membrul_drept}")
+                    stare_curenta = regula.membrul_drept
+            
+            if not exista_regula:
+                print(f"Blocaj: nu exista tranzitie din {stare_curenta} cu simbol {simbol}")
+                return "blocaj"
+            
+        print(f"Stare finala dupa citirea intregului cuvant: {stare_curenta}")
+        if stare_curenta in self.StariFinale:
+            print("Cuvant acceptat")
+            return "acceptat"
+        else:
+            print("Cuvant neacceptat")
+            return "neacceptat"
