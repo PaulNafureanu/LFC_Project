@@ -1,4 +1,5 @@
 from src.gramatica import Gramatica
+from src.afd import AFD
 from src.path import PathMaker
 from typing import Set
 
@@ -57,8 +58,22 @@ def run_exercise_1_solution():
         )
 
 
+def run_exercise_2_solution():
+    path_maker = PathMaker(__file__, "data", "afd")
+    file_path = path_maker.get_independent_OS_path("1.txt")
+
+    afd = AFD()
+
+    afd.citire(file_path)
+
+    afd.afisare()
+
+    pass
+
+
 def main() -> None:
-    run_exercise_1_solution()
+    # run_exercise_1_solution()
+    run_exercise_2_solution()
 
 
 if __name__ == "__main__":
