@@ -9,7 +9,7 @@ class Tranzitie:
         self.membrul_drept = membrul_drept
 
     def __str__(self) -> str:
-        return f"{self.membrul_stang} {self.simbol} {self.membrul_drept}"
+        return f"δ({self.membrul_stang}, {self.simbol}) = {self.membrul_drept}"
 
 
 class AFD:
@@ -107,10 +107,12 @@ class AFD:
         print("\nSe afiseaza AFD definita prin: ")
         print(f"Stari = {list_to_str(self.Stari)}")
         print(f"Sigma = {list_to_str(self.Sigma)}")
-        print(f"Delta = {self.Delta}")
+        # print(f"Delta = {self.Delta}")
+        print()
         print(f"Stare initiala = {self.StareInitiala}")
         print(f"Stari finale = {list_to_str(self.StariFinale)}")
-        print(f"Tranzitii = {" " + ", ".join({str(r) for r in  self.Reguli}) + " "}")
+        print("\nTranzitii:")
+        print(f"{"\n".join({" " + str(r) for r in  self.Reguli})}")
 
     def verificare(self, cuvant: str):
 
