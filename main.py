@@ -62,14 +62,33 @@ def run_exercise_2_solution():
     path_maker = PathMaker(__file__, "data", "afd")
     file_path = path_maker.get_independent_OS_path("1.txt")
 
+    # Initializam un obiect AFD gol.
     afd = AFD()
 
-    afd.citire(file_path)
+    try:
+        # Incercam sa citim definitia AFD-ului din fisier.
+        afd.citire(file_path)
+    except Exception as e:
+        # Daca apare o eroare la citire (format gresit, fisier lipsa, etc.),
+        # o afisam si oprim executia functiei.
+        print(e)
+        return
+    
+    # Daca AFD-ul citit este valid conform regulilor de validare...
+    if afd.validare():
+        # ... il afisam (stari, alfabet, stare initiala, stari finale, tranzitii).
+        afd.afisare()
 
-    afd.afisare()
+        # Cerem utilizatorului un cuvant pentru verificare.
+        cuvant = input("\nIntroduce-ti un cuvant pentru verificare: ")
 
-    pass
+        # Cat timp utilizatorul introduce un cuvant nenul (string nevid)...
+        while cuvant:
+            # Verificam cuvantul in AFD (acceptat / neacceptat / blocaj).
+            afd.verificare(cuvant)
 
+            # Cerem un nou cuvant; daca se apasa doar Enter, bucla se opreste.
+            cuvant = input("\nIntroduce-ti un cuvant pentru verificare: ")
 
 def main() -> None:
     # run_exercise_1_solution()
