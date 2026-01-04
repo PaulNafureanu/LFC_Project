@@ -1,5 +1,6 @@
 from src.gramatica import Gramatica
 from src.afd import AFD
+from src.afn import AFN
 from src.path import PathMaker
 from typing import Set
 
@@ -89,10 +90,27 @@ def run_exercise_2_solution():
 
             # Cerem un nou cuvant; daca se apasa doar Enter, bucla se opreste.
             cuvant = input("\nIntroduce-ti un cuvant pentru verificare: ")
+            
+            
+def run_exercise_3_solution():
+    path_maker = PathMaker(__file__, "data", "afn")
+    file_path = path_maker.get_independent_OS_path("1.txt")
+    
+    afn = AFN()
+    
+    try:
+        afn.citire(file_path)
+    except Exception as e:
+        print(e)
+        return
+    
+    if afn.validare():
+        afn.afisare()
 
 def main() -> None:
     # run_exercise_1_solution()
-    run_exercise_2_solution()
+    # run_exercise_2_solution()
+    run_exercise_3_solution()
 
 
 if __name__ == "__main__":
