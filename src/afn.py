@@ -170,3 +170,5 @@ class AFN:
 
         # păstrăm ordinea și duplicatele (dacă există) exact cum s-au citit
         print("\n".join([" " + str(r) for r in self.Reguli]))
+        
+    
