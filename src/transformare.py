@@ -30,11 +30,10 @@ class StariFinale:
 
 
 class Transformator:
-    def __init__(self, afn:AFN, afd:AFD) -> None:
+    def __init__(self, afn:AFN) -> None:
         self.afn = afn
-        self.afd = afd
         
-    def transformare_AFN_in_AFD(self) -> None:
+    def transformare_AFN_in_AFD(self) -> AFD:
         if self.afn.StareInitiala:
             stari_finale:StariFinale = StariFinale()
             stari_finale.add("S1", set(self.afn.StareInitiala))
@@ -54,10 +53,14 @@ class Transformator:
             final_names = stari_finale.names
             final_names.remove("S1")
             
-            self.afd.Stari = stari_finale.names
-            self.afd.Sigma = Sigma
-            self.afd.Delta = Delta
-            self.afd.StareInitiala = "S1"
-            self.afd.StariFinale = final_names
+            afd = AFD()
+            afd.Stari = stari_finale.names
+            afd.Sigma = Sigma
+            afd.Delta = Delta
+            afd.StareInitiala = "S1"
+            afd.StariFinale = final_names
+            return afd
+        else:
+            raise ValueError("Starea initiala in AFN trebuie sa existe")
 
             

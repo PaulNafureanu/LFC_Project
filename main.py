@@ -1,6 +1,7 @@
 from src.gramatica import Gramatica
 from src.afd import AFD
 from src.afn import AFN
+from src.transformare import Transformator
 from src.path import PathMaker
 from typing import Set
 
@@ -106,11 +107,14 @@ def run_exercise_3_solution():
     
     if afn.validare():
         afn.afisare()
+        
+        transformare = Transformator(afn)
+        afd = transformare.transformare_AFN_in_AFD()
 
 def main() -> None:
-    # run_exercise_1_solution()
+    run_exercise_1_solution()
     # run_exercise_2_solution()
-    run_exercise_3_solution()
+    # run_exercise_3_solution()
 
 
 if __name__ == "__main__":
